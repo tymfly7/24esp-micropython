@@ -9,7 +9,8 @@ import utime as time
 
 from gps import adafruit_gps
 
-# Create a GPS module instance.
+# Create a GPS module instance
+# *** If does not work, try to set baudrate to 9600 once ***
 uart = UART(2, baudrate=115_200)  #, timeout_chars=3000)  #, pins=('P8','P2'))
 print(uart)
 
@@ -24,13 +25,13 @@ time.sleep(2)
 #   https://cdn-shop.adafruit.com/datasheets/PMTK_A11.pdf
 
 # Turn on the basic GGA and RMC info (what you typically want)
-# gps.send_command('PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0')
+gps.send_command('PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0')
 # Turn on just minimum info (RMC only, location):
 # gps.send_command('PMTK314,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0')
 # Turn off everything:
 # gps.send_command('PMTK314,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0')
 # Turn on everything (not all of it is parsed!)
-gps.send_command('PMTK314,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0')
+# gps.send_command('PMTK314,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0')
 
 # Set update rate to once a second (1hz) which is what you typically want.
 gps.send_command('PMTK220,1000')
@@ -66,10 +67,10 @@ try:
             last_print = current
             print(f"{gps.timestamp_utc};{gps.latitude};{gps.longitude};{gps.speed};{gps.track_angle_deg};{gps.altitude_m}")
 
-            if not gps.has_fix:
-                # Try again if we don't have a fix yet.
-                print('Waiting for fix...')
-                continue
+            # if not gps.has_fix:
+            #     # Try again if we don't have a fix yet.
+            #     print('Waiting for fix...')
+            #     continue
 
             # We have a fix! (gps.has_fix is true)
             # Print out details about the fix like location, date, etc.
@@ -88,10 +89,10 @@ try:
             # and might not be present.  Check if they're None before trying to use!
             # if gps.satellites is not None:
             #     print('# satellites: {}'.format(gps.satellites))
-            # if gps.altitude_m is not None:
-            #     print('Altitude: {} meters'.format(gps.altitude_m))
-            # if gps.speed is not None:
-            #     print('Speed: {} km/h'.format(gps.speed))
+            if gps.altitude_m is not None:
+                print('Altitude: {} meters'.format(gps.altitude_m))
+            if gps.speed is not None:
+                print('Speed: {} km/h'.format(gps.speed))
             # if gps.track_angle_deg is not None:
             #     print('Track angle: {} degrees'.format(gps.track_angle_deg))
             # if gps.horizontal_dilution is not None:

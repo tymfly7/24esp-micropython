@@ -39,6 +39,7 @@ def getGPS(gpsModule):
         # gpsModule.readline()
         buff = str(gpsModule.readline())
         data = buff.split(',')
+        print(data[0])  # For debug only
 
         # if (data[0] != "b'$GPGGA" and
         #     data[0] != "b'$GPRMC" and
